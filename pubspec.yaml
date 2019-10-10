@@ -2,7 +2,7 @@ name: bluetooth_printer
 description: A new Flutter plugin for Android to use bluetooth print.
 version: 0.0.1
 author: lange <279976620@qq.com>
-homepage:
+homepage: https://github.com/liangguocheng/bluetooth_printer
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
