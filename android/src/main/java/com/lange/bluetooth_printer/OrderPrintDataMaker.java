@@ -45,6 +45,7 @@ public class OrderPrintDataMaker implements PrintDataMaker {
             printer.print("商户名称："+orderModel.getOrder().getMerchantName());
             printer.printLineFeed();
             printer.print("联系电话："+orderModel.getOrder().getMerchantPhone());
+            printer.printLineFeed();
             printer.print(getImaginaryLine());
             printer.printLineFeed();
             printer.print("收货人："+orderModel.getOrder().getReceiver());
@@ -55,7 +56,8 @@ public class OrderPrintDataMaker implements PrintDataMaker {
             printer.printLineFeed();
             printer.print("用户备注：" + orderModel.getOrder().getRemake());
             printer.printLineFeed();
-
+            printer.print(getImaginaryLine());
+            printer.printLineFeed();
             /*商品*/
             double productTotal=0;
             for (OrderModel.Details detail : orderModel.getDetails()) {
@@ -64,21 +66,27 @@ public class OrderPrintDataMaker implements PrintDataMaker {
                 printer.setAlignLeft();
                 printer.print(detail.getName());
                 printer.printLineFeed();
-                printer.printInOneLine("¥"+price,"x"+detail.getNum(),20);
+                String priceStr = "￥"+price;
+                String numStr = "x"+detail.getNum();
+                printer.print(priceStr+getImaginaryLine(32-priceStr.length()-numStr.length())+numStr);
                 printer.printLineFeed();
                 printer.print(getImaginaryLine());
                 printer.printLineFeed();
             }
             printer.print(String.format("商品合计：%.2f",productTotal));
             printer.printLineFeed();
-            printer.print("配送费："+orderModel.getOrder().getFreight());
+            printer.print(String.format("配送费：%.2f",orderModel.getOrder().getFreight()));
             printer.printLineFeed();
-            printer.print("实付金额：" + orderModel.getOrder().getTotalAmount());
+            printer.print(String.format("实付金额：%.2f",orderModel.getOrder().getTotalAmount()));
+            printer.printLineFeed();
             printer.printLineFeed();
             printer.print("感谢您对随时到家的信任，期待再次光临！");
+            printer.printLineFeed();
 
             /*结束*/
             printer.setEmphasizedOff();
+            printer.printLineFeed();
+            printer.printLineFeed();
             printer.printLineFeed();
             printer.feedPaperCutPartial();
             data.add(printer.getDataAndClose());
@@ -88,7 +96,16 @@ public class OrderPrintDataMaker implements PrintDataMaker {
         }
     }
 
+    /*32个字符*/
     private String getImaginaryLine(){
-        return "----------------------------------";
+        return "--------------------------------";
+    }
+
+    private String getImaginaryLine(int length){
+        String result = "";
+        for (int i = 0; i < length-1; i++) {
+            result+=" ";
+        }
+        return result;
     }
 }

@@ -12,8 +12,8 @@ class BluetoothPrinter {
     return version;
   }
 
-  static Future printOrderTicket(Map _orderInfo) async{
-    await _channel.invokeMethod('printOrderTicket',{'orderJsonStr':json.encode(_orderInfo)});
-    return;
+  static Future<int> printOrderTicket(Map _orderInfo) async{
+   int result =  await _channel.invokeMethod('printOrderTicket',{'orderJsonStr':json.encode(_orderInfo)});
+    return result;
   }
 }

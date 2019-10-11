@@ -29,8 +29,9 @@ public class BluetoothPrinterPlugin implements MethodCallHandler {
             System.out.println(orderJsonStr);
             OrderModel orderModel = new Gson().fromJson(orderJsonStr,OrderModel.class);
             BlueToothPrinter printer = new BlueToothPrinter(orderModel);
-            printer.printOrderTicket();
+            boolean b = printer.printOrderTicket();
             printer.close();
+            result.success(b);
         } else {
             result.notImplemented();
         }
