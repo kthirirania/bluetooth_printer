@@ -2,6 +2,7 @@ package com.lange.bluetooth_printer;
 
 import com.google.gson.Gson;
 
+import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -16,23 +17,36 @@ public class BluetoothPrinterPlugin implements MethodCallHandler {
      * Plugin registration.
      */
     public static void registerWith(Registrar registrar) {
-        final MethodChannel channel = new MethodChannel(registrar.messenger(), "bluetooth_printer");
+        final MethodChannel channel = new MethodChannel(registrar.messenger(), "bluetooth_printer/methodChannel");
         channel.setMethodCallHandler(new BluetoothPrinterPlugin());
+
+        EventChannel eventChannel = new EventChannel(registrar.messenger(), "bluetooth_printer/scanBlueToothEvent");
+        ScanBlueToothEventListener scanBlueToothEventListener = new ScanBlueToothEventListener(registrar.activity());
+        eventChannel.setStreamHandler(scanBlueToothEventListener);
     }
+
+    BlueToothPrinter blueToothPrinter;
 
     @Override
     public void onMethodCall(MethodCall call, Result result) {
-        if (call.method.equals("getPlatformVersion")) {
-            result.success("Android " + android.os.Build.VERSION.RELEASE);
-        } else if (call.method.equals("printOrderTicket")) {
+        if(blueToothPrinter==null){
+            blueToothPrinter = new BlueToothPrinter();
+        }
+        if (call.method.equals("startScanBlueTooth")) {
+            blueToothPrinter.startScanBlueTooth();
+        } else if(call.method.equals("isConnected")){
+            boolean b = blueToothPrinter.isConnected();
+            result.success(b?1:0);
+        }else if(call.method.equals("connectBlueTooth")){
+            int index = call.argument("index");
+            blueToothPrinter.connectBlueTooth(index);
+        }else if(call.method.equals("print")){
             String orderJsonStr = call.argument("orderJsonStr");
-            System.out.println(orderJsonStr);
             OrderModel orderModel = new Gson().fromJson(orderJsonStr,OrderModel.class);
-            BlueToothPrinter printer = new BlueToothPrinter(orderModel);
-            boolean b = printer.printOrderTicket();
-            printer.close();
-            result.success(b);
-        } else {
+            blueToothPrinter.print(orderModel);
+        }
+
+        else {
             result.notImplemented();
         }
     }

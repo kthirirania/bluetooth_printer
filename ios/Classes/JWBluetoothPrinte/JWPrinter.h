@@ -167,6 +167,7 @@ typedef NS_ENUM(NSInteger, HLFontSize) {
  */
 - (void)appendFooter:(NSString *)footerInfo;
 
+- (void)appendHeader:(NSString *)headerInfo;
 /**
  换行符
  */

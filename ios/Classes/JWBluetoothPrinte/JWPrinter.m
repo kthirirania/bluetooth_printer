@@ -404,6 +404,10 @@
     [self appendText:footerInfo alignment:HLTextAlignmentCenter];
 }
 
+- (void)appendHeader:(NSString *)headerInfo{
+     [self appendText:headerInfo alignment:HLTextAlignmentCenter fontSize:HLFontSizeTitleMiddle];
+}
+
 - (NSData *)getFinalData
 {
     return _printerData;

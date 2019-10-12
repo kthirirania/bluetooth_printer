@@ -13,32 +13,27 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-
+  BluetoothPrinter bluetoothPrinter;
   @override
   void initState() {
+
     super.initState();
+
     initPlatformState();
+    bluetoothPrinter = new BluetoothPrinter();
+
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await BluetoothPrinter.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) return;
 
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
   }
 
   @override
@@ -49,8 +44,20 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: IconButton(icon: Icon(Icons.add), onPressed: (){
-            BluetoothPrinter.printOrderTicket({
+          child: Column(children: <Widget>[
+            IconButton(icon: Icon(Icons.add), onPressed: (){
+              bluetoothPrinter.scanBlueToothEvent.listen((data)async{
+                print('listent data = $data');
+              });
+              bluetoothPrinter.startScanBlueTooth();
+            }),
+            IconButton(icon: Icon(Icons.bluetooth_connected),onPressed: ()async{
+              bluetoothPrinter.connectBlueTooth(0);
+              bool b =await bluetoothPrinter.isConnected();
+              print('isConnected:$b');
+            },),
+            IconButton(icon: Icon(Icons.print),onPressed: (){
+              bluetoothPrinter.print({
               "Id": "15704350570000004",
               "order": {
                 "Id": "15704350570000004",
@@ -109,7 +116,8 @@ class _MyAppState extends State<MyApp> {
               "prepay_id": "wx07155739391081e3cffc355c1711783100",
               "mt_peisong_id": null
             });
-          }),
+            },),
+          ],),
         ),
       ),
     );

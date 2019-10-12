@@ -9,6 +9,13 @@
 #import <Flutter/Flutter.h>
 
 @interface BlueToothPrinter : NSObject
--(void)print;
+/*开始扫描蓝牙设备*/
+-(void)startScanBlueTooth;
+/*连接蓝牙设备*/
+-(int)connectBlueTooth:(int)index;
+/*打印*/
+-(void)print:(NSString*)orderJsonStr;
+/*是否已连接蓝牙设备*/
+-(int)isConnected;
 @end
 
