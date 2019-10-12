@@ -40,6 +40,7 @@ public class BluetoothPrinterPlugin implements MethodCallHandler {
         }else if(call.method.equals("connectBlueTooth")){
             int index = call.argument("index");
             blueToothPrinter.connectBlueTooth(index);
+            result.success(1);
         }else if(call.method.equals("print")){
             String orderJsonStr = call.argument("orderJsonStr");
             OrderModel orderModel = new Gson().fromJson(orderJsonStr,OrderModel.class);

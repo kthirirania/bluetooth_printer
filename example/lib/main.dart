@@ -52,7 +52,9 @@ class _MyAppState extends State<MyApp> {
               bluetoothPrinter.startScanBlueTooth();
             }),
             IconButton(icon: Icon(Icons.bluetooth_connected),onPressed: ()async{
-              bluetoothPrinter.connectBlueTooth(0);
+              bluetoothPrinter.connectBlueTooth(0).then((result){
+                print("connected result $result");
+              });
               bool b =await bluetoothPrinter.isConnected();
               print('isConnected:$b');
             },),

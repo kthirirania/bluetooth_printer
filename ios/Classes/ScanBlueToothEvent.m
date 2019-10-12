@@ -25,8 +25,7 @@
     NSArray * arrays = params[@"params"];
     NSMutableArray * resultArray  = [NSMutableArray array];
     for (CBPeripheral * p in arrays) {
-        NSDictionary * temp = @{@"name":p.name};
-        [resultArray addObject:temp];
+        [resultArray addObject:p.name];
     }
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:resultArray options:0 error:nil];
 

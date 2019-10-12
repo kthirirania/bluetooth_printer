@@ -28,6 +28,7 @@
     else if([@"connectBlueTooth" isEqualToString:call.method]){
         int index = [call.arguments[@"index"] intValue];
         [blueToothPrinter connectBlueTooth:index];
+        result(@(1));
     }else if([@"print" isEqualToString:call.method]){
         NSString * orderJsonStr = call.arguments[@"orderJsonStr"];
         [blueToothPrinter print:orderJsonStr];
